@@ -1,0 +1,8 @@
+module Layers
+  BACKGROUND = 0,
+  ENVIRONMENTAL = 1,
+  DESTRUCTIBLE = 4,
+  CHARACTERS = 5,
+  VISUAL_FX = 7,
+  UI = 8
+end
