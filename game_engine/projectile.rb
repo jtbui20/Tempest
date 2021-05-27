@@ -7,9 +7,10 @@ class Projectile < GameObject
   def initialize(master, position, destination, magnitude)
     super master
     @p = Gosu::Image.new('assets/projectile.png')
-    @position = position
+    @dimensions = Point.new(@p.width / 2, @p.height / 2)
+    @position = position - @dimensions
     @magnitude = magnitude
-    @direction = (destination - Point.new(@p.width / 2, @p.height / 2) - position).direction
+    @direction = (destination - @dimensions - position).direction
     @destination = destination
 
     @collider = Collider.new("hi", @position, Point.new(@p.width, @p.height), Layers::DESTRUCTIBLE)
