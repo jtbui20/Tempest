@@ -30,6 +30,7 @@ class Character < GameObject
     @img = Gosu::Image.new('assets/barrel_N.png')
     @dimensions = Point.new(@img.width, @img.height)
     @position = position
+    @position_center = position + (@dimensions / 2)
 
     @collider = Collider.new("hi", @position, Point.new(@img.width, @img.height), Layers::CHARACTERS)
   end
@@ -39,6 +40,7 @@ class Character < GameObject
   end
 
   def update
+    @position_center = position + (@dimensions / 2)
     @collider.update(@position)
   end
 

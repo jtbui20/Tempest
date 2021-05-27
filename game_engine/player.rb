@@ -27,7 +27,7 @@ class Player < Character
       @dash_cooldown.restart_now
     end
 
-    @collider.update(@position)
+    super
   end
 
   def handle_player_input
@@ -44,7 +44,7 @@ class Player < Character
       movement += Point.new(1, 0)
     end
 
-    @is_dash ? Move(movement.direction, 10.0) : Move(movement.direction)
+    @is_dash ? Move(movement.direction, 7.5) : Move(movement.direction)
   end
 
   def button_down(id)
@@ -58,7 +58,7 @@ class Player < Character
       mouse = Point.new(@master.mouse_x, @master.mouse_y)
       direction = (mouse - @position).direction * 50
 
-      @master.add_element(Projectile.new(@master, @position + direction,mouse, 10.0))
+      @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0))
     when Gosu::KB_SPACE
       puts @position.x.to_s + " " + @position.y.to_s
     end

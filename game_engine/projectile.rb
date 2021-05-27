@@ -6,14 +6,16 @@ class Projectile < GameObject
   attr_accessor :collider
   def initialize(master, position, destination, magnitude)
     super master
-    @p = Gosu::Image.new('assets/projectile.png')
-    @dimensions = Point.new(@p.width / 2, @p.height / 2)
-    @position = position - @dimensions
-    @magnitude = magnitude
-    @direction = (destination - @dimensions - position).direction
-    @destination = destination
 
-    @collider = Collider.new("hi", @position, Point.new(@p.width, @p.height), Layers::DESTRUCTIBLE)
+    @img = Gosu::Image.new('assets/projectile.png')
+    @dimensions = Point.new(@img.width, @img.height)
+
+    @position = position - @dimensions / 2
+    @destination = destination - @dimensions / 2
+    @direction = (destination - position).direction
+    @magnitude = magnitude
+
+    @collider = Collider.new("hi", @position, Point.new(@img.width, @img.height), Layers::DESTRUCTIBLE)
   end
 
   def update
@@ -27,7 +29,7 @@ class Projectile < GameObject
   end
 
   def draw
-    @p.draw(@position.x, @position.y, 2)
+    @img.draw(@position.x, @position.y, 2)
   end
 
   def handle_collision
