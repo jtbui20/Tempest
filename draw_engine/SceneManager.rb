@@ -42,4 +42,8 @@ class SceneManager
       current_scene.button_down(id)
     end
   end
+
+  def need_cursor?
+    current_scene.is_clickable
+  end
 end

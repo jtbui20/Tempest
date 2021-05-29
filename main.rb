@@ -34,7 +34,7 @@ class GameWindow < Gosu::Window
   end
 
   def needs_cursor?
-    true
+    @sm.need_cursor?
   end
 end
 
