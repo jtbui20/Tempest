@@ -5,7 +5,7 @@ require './draw_engine/Collider.rb'
 class Projectile < GameObject
   attr_accessor :collider
   def initialize(master, position, destination, magnitude)
-    super master
+    super "Projectile", master
 
     @img = Gosu::Image.new('assets/projectile.png')
     @dimensions = Point.new(@img.width, @img.height)

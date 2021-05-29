@@ -14,8 +14,6 @@ class GameWindow < Gosu::Window
 
   def init_scenes
     require './scenes/main_menu'
-    require './scenes/vs_com_difficulty'
-    require './scenes/tutorial_arena'
 
     @sm = SceneManager.new(width, height).tap do |sm|
       sm.add_scene(MAIN_MENU.new(sm))

@@ -6,7 +6,7 @@ require './game_engine/Object'
 class Reticle < GameObject
   attr_accessor :position
   def initialize(scene)
-    super(scene)
+    super("Reticle", scene)
     @img = Gosu::Image.new("assets/reticle.png")
   end
 
@@ -16,6 +16,5 @@ class Reticle < GameObject
 
   def update
     @position = Point.new(@master.mouse_x - @img.width / 2, @master.mouse_y - @img.height / 2)
-    
   end
 end

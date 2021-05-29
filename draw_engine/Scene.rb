@@ -44,4 +44,8 @@ class Scene
   def remove_element(item)
     @elements.delete(item)
   end
+
+  def find_in_scene(name)
+    return @elements.reject {|item| item.name != name}
+  end
 end

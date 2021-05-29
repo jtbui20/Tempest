@@ -6,7 +6,7 @@ require './game_engine/projectile'
 
 class Player < Character
   def initialize(master, position)
-    super(master, position)
+    super("PlayerA", master, position)
 
     @dash_anim = Timer.new(duration = 260)
     @dash_cooldown = Timer.new(duration = 150)
@@ -32,10 +32,12 @@ class Player < Character
 
   def handle_player_input
     movement = Point.new(0, 0)
+    # ! N/S 0.5 & 30deg
+    # ! N/S 1 & 45 deg
     if Gosu.button_down?(Gosu::KB_W)
-      movement += Point.new(0, -0.5)
+      movement += Point.new(0, -1)
     elsif Gosu.button_down?(Gosu::KB_S)
-      movement += Point.new(0, 0.5)
+      movement += Point.new(0, 1)
     end
 
     if Gosu.button_down?(Gosu::KB_A)
