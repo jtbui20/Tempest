@@ -1,6 +1,6 @@
 require 'gosu'
 require './draw_engine/Point'
-require './draw_engine/grids'
+require './draw_engine/Grids'
 require './game_engine/player'
 require './game_engine/character'
 require './game_engine/reticle'
@@ -15,8 +15,8 @@ class TUT_ARENA < Scene
     @player = Player.new(self, Point.new(500,500))
     @filler = Character.new("Character", self, Point.new(800, 200))
 
-    @elements.push (@filler)
-    @elements.push (@player)
+    @elements << @filler
+    @elements << @player
 
     gen_ui
     @is_clickable = false
@@ -42,19 +42,7 @@ class TUT_ARENA < Scene
       finalize_init
     end
 
-    collidables = @elements.reject{ |c| !defined?(c.collider)}
-    collidables.each do |i|
-      collidables.each do |j|
-        unless i == j
-          if i.collider.collision_2d?(j.collider.position, j.collider.dimensions)
-              i.collider.add_collision(j)
-          end
-        end
-      end
-      i.handle_collision
-    end
-    collidables.each { |i| i.collider.clear_collisions}
-    @elements.each { |i| i.update}
+    super
   end
 
   def button_down(id)

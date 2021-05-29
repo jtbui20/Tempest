@@ -1,3 +1,5 @@
+require './draw_engine/Layers'
+
 class Scene
   attr_reader :name, :draw_func, :elements, :master, :is_clickable, :mouse_pos
 
@@ -20,15 +22,24 @@ class Scene
     @elements.each &:draw
   end
 
-  def update; end
+  def update; 
+    collidables = @elements.filter{ |c| defined?(c.collider)}
+    collidables.each { |i| i.collider.collider_update(collidables - [i])}
+    
+    @elements.each &:update
+  end
+
+  def handle_click_UI
+    @elements.filter { |i| i.layer == Layers::UI}.reverse.each do |element|
+      if element.position <= @mouse_pos && @mouse_pos <= (element.position + element.dimensions)
+        return element.click.call(element)
+      end
+    end
+  end
 
   def button_down(id); 
     if id == Gosu::MS_LEFT
-      @elements.reverse.each do |element|
-        if element.position <= @mouse_pos && @mouse_pos <= (element.position + element.dimensions)
-          return element.click.call(element)
-        end
-      end
+      handle_click_UI
     end
   end
 
