@@ -17,7 +17,8 @@ class Character < GameObject
     @position = position
     @position_center = position + (@dimensions / 2)
 
-    @collider = Collider.new("hi", @position, Point.new(@img.width, @img.height), @layers)
+    @hit_layers = [Layers::DESTRUCTIBLE, Layers::CHARACTERS]
+    @collider = Collider.new(self, @position, Point.new(@img.width, @img.height), @hit_layers)
     @character_stats = CharacterStats.new(ClassType::Augmenter, [[Stats::ATK, true, 10], [Stats::DEF, false, 10]] , "")
   end
 

@@ -1,7 +1,7 @@
 require 'gosu'
 
 class GameObject
-  attr_accessor :name, :scene
+  attr_accessor :name, :scene, :position, :layer
 
   def initialize name, scene, position, layer
     @name = name

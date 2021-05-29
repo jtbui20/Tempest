@@ -19,7 +19,7 @@ class Button < GameObject
     @text = text
 
     @click = on_click
-    @collider = Collider.new(master, position, dimensions, @layer)
+    @collider = Collider.new(master, position, dimensions, [])
   end
 
   def draw

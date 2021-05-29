@@ -5,11 +5,11 @@ require './draw_engine/GosuDrawExtensions'
 
 class Collider
   attr_accessor :position, :dimensions, :collisions
-  def initialize (master, position, dimensions, layer)
+  def initialize (master, position, dimensions, accept_layers)
     @position = position
     @dimensions = dimensions
     @master = master
-    @layer = layer
+    @accept_layers = accept_layers
 
     @collisions = []
     @hitbox_visible = true
@@ -43,5 +43,16 @@ class Collider
 
   def update (position)
     @position = position
+  end
+
+  def collider_update (collidables)
+    collidables.filter { |c| @accept_layers.include?(c.layer)}.each do |other|
+      if collision_2d?(other.collider.position, other.collider.dimensions)
+        add_collision(other)
+      end
+    end
+
+    @master.handle_collision unless @collisions.empty?
+    clear_collisions
   end
 end

@@ -15,7 +15,8 @@ class Projectile < GameObject
     @direction = (destination - position).direction
     @magnitude = magnitude
 
-    @collider = Collider.new("hi", @position, Point.new(@img.width, @img.height), @layer)
+    @hit_layers = [Layers::DESTRUCTIBLE, Layers::CHARACTERS]
+    @collider = Collider.new(self, @position, Point.new(@img.width, @img.height), @hit_layers)
   end
 
   def update
@@ -33,8 +34,6 @@ class Projectile < GameObject
   end
 
   def handle_collision
-    unless @collider.execute_collisions == []
-      @master.remove_element(self)
-    end
+    @master.remove_element(self)
   end
 end
