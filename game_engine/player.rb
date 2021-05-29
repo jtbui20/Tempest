@@ -3,6 +3,7 @@ require './game_engine/character'
 require './draw_engine/Point'
 require './game_engine/Timer'
 require './game_engine/projectile'
+require './draw_engine/anchors'
 
 class Player < Character
   def initialize(master, position)
@@ -62,7 +63,11 @@ class Player < Character
 
       @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0))
     when Gosu::KB_SPACE
-      puts @position.x.to_s + " " + @position.y.to_s
+      gen_select_circle
     end
+  end
+
+  def gen_select_circle
+
   end
 end

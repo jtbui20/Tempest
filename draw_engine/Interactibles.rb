@@ -35,6 +35,47 @@ class Button < GameObject
   end
 end
 
+# Specific CircleSelect Buttons
+class ButtonImg < GameObject
+  attr_accessor :position, :dimensions, :click, :text
+
+  def initialize(name, master, position, img, anchor, on_click = nil)
+    @img = img
+    @dimensions = Point.new(img.width, img.height)
+
+    @anchor = anchor
+    case anchor
+    when TOP_LEFT
+      p = position
+    when TOP_CENTER
+      p = position - Point.new(@dimensions.x / 2, 0) 
+    when TOP_RIGHT
+      p = position - Point.new(@dimensions.x, 0)
+    when CENTER_LEFT
+      p = position - Point.new(0, @dimensions.y / 2)
+    when CENTER
+      p = position - (@dimensions / 2)
+    when CENTER_RIGHT
+      p = position - Point.new(@dimensions.x, @dimensions.y / 2)
+    when BOTTOM_LEFT
+      p = position - Point.new(0, @dimensions.y)
+    when BOTTOM_CENTER
+      p = position - Point.new(@dimensions.x / 2, @dimensions.y)
+    when BOTTOM_RIGHT
+      p = position - @dimensions
+    end
+
+    super(name, master, position, Layers::UI)
+    @click = on_click
+
+    @collider = Collider.new(master, position, dimensions, [])
+  end
+
+  def draw
+    @img.draw(@position.x, @position.y, @layer, 1, 1)
+  end
+end
+
 class ProgressBar < GameObject
   attr_accessor :positions, :dimensions, :color_fg, :color_bg, :min, :max, :value
 

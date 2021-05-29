@@ -1,0 +1,6 @@
+require 'gosu'
+require './draw_engine/Point'
+require './draw_engine/Layers'
+require './game_engine/Object'
+require './draw_engine/Collider.rb'
+require './interactibles'
