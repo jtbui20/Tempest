@@ -3,9 +3,11 @@ require 'gosu'
 class GameObject
   attr_accessor :name, :scene
 
-  def initialize name, scene
+  def initialize name, scene, position, layer
     @name = name
     @master = scene
+    @position = position
+    @layer = layer
   end
 
   def draw; end

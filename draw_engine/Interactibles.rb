@@ -3,14 +3,13 @@ require_relative './GosuDrawExtensions'
 require_relative './Point'
 require_relative './Layers'
 require './game_engine/Object'
+require './draw_engine/Collider.rb'
 
 class Button < GameObject
   attr_accessor :position, :dimensions, :color_fg, :color_bg, :click, :text
 
   def initialize(name, master, position, dimensions, text = '', on_click = nil)
-    super(name, master)
-
-    @position = position
+    super(name, master, position, Layers::UI)
     @dimensions = dimensions
 
     @color_fg = 0xff_000000
@@ -20,6 +19,7 @@ class Button < GameObject
     @text = text
 
     @click = on_click
+    @collider = Collider.new(master, position, dimensions, @layer)
   end
 
   def draw
@@ -28,10 +28,10 @@ class Button < GameObject
                .push(@position + Point.new(0, @dimensions.y))
                .push(@position + @dimensions)
                .push(@position + Point.new(@dimensions.x, 0))
-    draw_quad_simp(@corners, [@color_bg], Layers::UI)
+    draw_quad_simp(@corners, [@color_bg], @layer)
 
     center = @position + (@dimensions / 2)
-    @font.draw_text_rel(@text, center.x, center.y, Layers::UI, 0.5, 0.5, 1, 1, @color_fg)
+    @font.draw_text_rel(@text, center.x, center.y, @layer, 0.5, 0.5, 1, 1, @color_fg)
   end
 end
 
@@ -39,7 +39,7 @@ class ProgressBar < GameObject
   attr_accessor :positions, :dimensions, :color_fg, :color_bg, :min, :max, :value
 
   def initialize (name, master, position, dimensions, follow_min, follow_max, follow_value)
-    @position = position
+    super(name, master, position, Layers::UI)
     @dimensions = dimensions
 
     @min = follow_min
@@ -60,7 +60,7 @@ class ProgressBar < GameObject
                .push(@position + Point.new(@dimensions.x * value_complete, @dimensions.y))
                .push(@position + Point.new(@dimensions.x * value_complete, 0))
 
-    draw_quad_simp(@corners, [0xff_ffffff], Layers::UI)
-    draw_quad_simp(@corners_progress, [0xff_00ff00], Layers::UI)
+    draw_quad_simp(@corners, [0xff_ffffff], @layer)
+    draw_quad_simp(@corners_progress, [0xff_00ff00], @layer)
   end
 end

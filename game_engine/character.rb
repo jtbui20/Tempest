@@ -10,14 +10,14 @@ class Character < GameObject
   attr_accessor :position, :collider, :dimensions, :character_stats
 
   def initialize(name, master, position)
-    super name, master
+    super name, master, position, Layers::CHARACTERS
     
     @img = Gosu::Image.new('assets/barrel_N.png')
     @dimensions = Point.new(@img.width, @img.height)
     @position = position
     @position_center = position + (@dimensions / 2)
 
-    @collider = Collider.new("hi", @position, Point.new(@img.width, @img.height), Layers::CHARACTERS)
+    @collider = Collider.new("hi", @position, Point.new(@img.width, @img.height), @layers)
     @character_stats = CharacterStats.new(ClassType::Augmenter, [[Stats::ATK, true, 10], [Stats::DEF, false, 10]] , "")
   end
 
@@ -37,7 +37,7 @@ class Character < GameObject
   def handle_collision
     @collider.execute_collisions.each do |other|
       if other.is_a?(Projectile)
-        @character_stats.hp -= 100
+        @character_stats.hp -= 10
       end
     end
   end

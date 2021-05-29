@@ -22,7 +22,7 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    @sm.update mouse_x, mouse_y
+    @sm.update(mouse_x, mouse_y)
   end
 
   def draw
@@ -30,7 +30,7 @@ class GameWindow < Gosu::Window
   end
 
   def button_down(id)
-    @sm.button_down id, mouse_x, mouse_y
+    @sm.button_down(id, mouse_x, mouse_y)
   end
 
   def needs_cursor?

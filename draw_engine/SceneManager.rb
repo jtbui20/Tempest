@@ -36,11 +36,7 @@ class SceneManager
 
   def button_down(id, x, y)
     current_scene.set_mouse(x,y)
-    if current_scene.is_clickable
-      current_scene.mouse_down(id, x, y)
-    else
-      current_scene.button_down(id)
-    end
+    current_scene.button_down(id)
   end
 
   def need_cursor?

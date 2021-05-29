@@ -57,7 +57,7 @@ class Player < Character
         @dash_anim.restart_now
       end
     when Gosu::MS_LEFT
-      mouse = Point.new(@master.mouse_x, @master.mouse_y)
+      mouse = @master.mouse_pos
       direction = (mouse - @position).direction * 50
 
       @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0))
