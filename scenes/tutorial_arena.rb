@@ -1,6 +1,6 @@
 require 'gosu'
 require './draw_engine/Point'
-require './draw_engine/iso_grid'
+require './draw_engine/grids'
 require './game_engine/player'
 require './game_engine/character'
 require './game_engine/reticle'
@@ -10,8 +10,8 @@ class TUT_ARENA < Scene
   def initialize master
     super('Tutorial', master)
     
-    t = Gosu::Image.new("assets/dirt_N.png")
-    @grid = Grid.new(t, 10, 10, @master.width, @master.height)
+    t = Gosu::Image.new("assets/training_room_tiles-01.png")
+    @grid = TopDownGrid.new(t, 10, 10, @master.width, @master.height)
     @player = Player.new(self, Point.new(500,500))
     @filler = Character.new("Character", self, Point.new(800, 200))
 
