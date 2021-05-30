@@ -1,5 +1,10 @@
 module Element
-  Flame, Water, Wind, Earth, Light, Shadow = *0..5
+  Flame,
+  Water,
+  Wind,
+  Earth,
+  Light,
+  Shadow = *0..5
   def self.key(value)
     case value
     when 0; "Flame"
@@ -14,11 +19,26 @@ module Element
 end
 
 module ClassType
-  Augmenter, Mage, Summoner = *0..2
+  Augmenter,
+  Mage,
+  Summoner = *0..2
+  def self.key(value)
+    case value
+    when 0; "Augmenter"
+    when 1; "Mage"
+    when 2; "Summoner"
+    else nil
+    end
+  end
 end
 
 module Stats
-  HP, MP, ATK, DEF, HASTE, AGI = *0..5
+  HP,
+  MP,
+  ATK,
+  DEF,
+  HASTE,
+  AGI = *0..5
 
   def self.key(value)
     case value
@@ -34,11 +54,28 @@ module Stats
 end
 
 module SpellType
-  Slash, Barrier, Movement, Projectile, Buff, Debuff = *0..5
+  Slash,
+  Barrier,
+  Movement,
+  Projectile,
+  Buff,
+  Debuff = *0..5
+
+  def self.key(value)
+    case value
+    when 0; "Slash"
+    when 1; "Barier"
+    when 2; "Movement"
+    when 3; "Projectile"
+    when 4; "Buff"
+    when 5; "Debuff"
+    else nil
+    end
+  end
 end
 
 # Ported modifier / buff management
-# ! AKSIM / DL-SIM
+# ! AK-SIM / DL-SIM
 
 class ModifierDict < Hash
   def initialize(*args, **kwargs)
@@ -154,24 +191,14 @@ class CharacterStats
   end
 
   # Observer Access
-  def get_hp; return @hp; end
-  def symbol_hp; return method(:get_hp); end
-  def get_hp_min; return @hp_min; end
-  def symbol_hp_min; return method(:get_hp_min); end
-  def get_hp_max; return @hp_max; end
-  def symbol_hp_max; return method(:get_hp_max); end
-  def get_mp ; return @mp; end
-  def symbol_mp; return method(:get_mp); end
-  def get_mp_min; return @mp_min; end
-  def symbol_mp_min; return method(:get_mp_min); end
-  def get_mp_max; return @mp_max; end
-  def symbol_mp_max; return method(:get_mp_max); end
-  def get_atk; return @atk; end
-  def symbol_atk; return method(:get_atk); end
-  def get_def; return @def; end
-  def symbol_def; return method(:get_def); end
-  def get_haste; return @haste; end
-  def symbol_haste; return method(:get_haste); end
-  def get_agi; return @agi; end
-  def symbol_agi; return method(:get_agi); end
+  def get_hp; return -> { @hp }; end
+  def get_hp_min; return -> { @hp_min }; end
+  def get_hp_max; return -> { @hp_max }; end
+  def get_mp; return -> { @mp }; end
+  def get_mp_min; return -> { @mp_min }; end
+  def get_mp_max; return -> { @mp_max }; end
+  def get_atk; return -> { @atk }; end
+  def get_def; return -> { @def }; end
+  def get_haste; return -> { @haste }; end
+  def get_agi; return -> { @agi }; end
 end
