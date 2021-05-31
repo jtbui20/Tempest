@@ -4,6 +4,8 @@ require './draw_engine/Point'
 require './game_engine/Timer'
 require './game_engine/projectile'
 require './draw_engine/anchors'
+require './game_engine/Buffs'
+require './game_engine/CharacterAttributes'
 
 class Player < Character
   def initialize(master, position)
@@ -63,7 +65,24 @@ class Player < Character
 
       @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0))
     when Gosu::KB_SPACE
-      gen_select_circle
+      puts @character_stats.get_current_buff.to_s
+    when Gosu::KB_Y
+      buff = Buff.new("It works!", 30,
+        Modifier.new(@gmods, "Attack", Stats::ATK, 1.25),
+        Modifier.new(@gmods, "Haste", Stats::HASTE, 1.5)
+      )
+      @character_stats.trigger_buff(buff)
+      puts "resolve"
+    when Gosu::KB_U
+      buff = Buff.new("Buffing system implemented!", 45,
+        Modifier.new(@gmods, "Agility", Stats::AGI, 1.5),
+        Modifier.new(@gmods, "Defence", Stats::DEF, 1.3))
+      @character_stats.trigger_buff(buff)
+    when Gosu::KB_I
+      puts "Attack : #{@character_stats.gmods.get_total(Stats::ATK)}"
+      puts "Defense : #{@character_stats.gmods.get_total(Stats::DEF)}"
+      puts "Haste : #{@character_stats.gmods.get_total(Stats::HASTE)}"
+      puts "Agility : #{@character_stats.gmods.get_total(Stats::AGI)}"
     end
   end
 

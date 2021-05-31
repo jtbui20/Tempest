@@ -3,12 +3,12 @@ require './draw_engine/Point'
 require './draw_engine/Collider'
 require './draw_engine/Layers'
 require './game_engine/Object'
-require './game_engine/Stats.rb'
+require './game_engine/CharacterStats'
 require './game_engine/projectile.rb'
+require './game_engine/CharacterAttributes'
 
 class Character < GameObject
   attr_accessor :position, :collider, :dimensions, :character_stats
-
   def initialize(name, master, position)
     super name, master, position, Layers::CHARACTERS
     
