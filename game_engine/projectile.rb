@@ -3,8 +3,8 @@ require './draw_engine/Point'
 require './draw_engine/Collider.rb'
 
 class Projectile < GameObject
-  attr_accessor :collider
-  def initialize(master, position, destination, magnitude)
+  attr_accessor :collider, :atk
+  def initialize(master, position, destination, magnitude, atk)
     super "Projectile", master, nil, Layers::DESTRUCTIBLE 
 
     @img = Gosu::Image.new('assets/projectile.png')
@@ -14,6 +14,7 @@ class Projectile < GameObject
     @destination = destination - @dimensions / 2
     @direction = (destination - position).direction
     @magnitude = magnitude
+    @atk = atk.call
 
     @hit_layers = [Layers::DESTRUCTIBLE, Layers::CHARACTERS]
     @collider = Collider.new(self, @position, Point.new(@img.width, @img.height), @hit_layers)

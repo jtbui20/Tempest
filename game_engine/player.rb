@@ -19,7 +19,7 @@ class Player < Character
   end
 
   def Move(direction, speed = 5.0)
-    @position += (direction * speed)
+    @position += (direction * speed * @character_stats.get_agi.call)
   end
 
   def update
@@ -65,7 +65,7 @@ class Player < Character
       mouse = @master.mouse_pos
       direction = (mouse - @position).direction * 50
 
-      @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0))
+      @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0, @character_stats.get_atk))
     when Gosu::KB_SPACE
       puts @character_stats.get_current_buff.to_s
     when Gosu::KB_Y
