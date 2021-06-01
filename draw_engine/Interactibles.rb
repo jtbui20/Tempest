@@ -50,14 +50,14 @@ class Text < GameObject
 
   def initialize(name, master, position, size, text)
     super(name, master, position, Layers::UI)
-    @font = Gosu::Font.new(64)
+    @font = Gosu::Font.new(size)
 
     @text = text
 
   end
 
   def draw
-    @font.draw_text_rel(@text.call, @position.x, @position.y, @layer, 1, 1, 0xff_000000)
+    @font.draw_text(@text.call, @position.x, @position.y, @layer, 1, 1, 0xff_000000)
   end
 end
 

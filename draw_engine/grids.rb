@@ -15,17 +15,15 @@ class IsoGrid
 
     (0...width).each do |x|
       (0...height).each do |y|
-        @grid.push(Point.new(
-                     (@screen_width / 2) - (@width_offset * (x + 1)) + (@width_offset * y), @height_offset * y + (@height_offset * x)
-                   ))
+        @grid << Point.new(
+          (@screen_width / 2) - (@width_offset * (x + 1)) + (@width_offset * y), 
+           @height_offset * y + (@height_offset * x))
       end
     end
   end
 
   def draw
-    @grid.each do |tile|
-      @tile.draw(tile.x, tile.y, Layers::BACKGROUND, 1, 1)
-    end
+    @grid.each { | tile| @tile.draw(tile.x, tile.y, Layers::BACKGROUND, 1, 1) }
   end
 end
 
@@ -42,8 +40,9 @@ class TopDownGrid
 
     (0...width).each do |x|
       (0...height).each do |y|
-        @grid << Point.new(@screen_width / 2 + (@scale_x * tile.width * (x - (height / 2).to_f)),
-        @screen_height / 2 + (@scale_y * tile.height * (y - (width / 2).to_f))
+        @grid << Point.new(
+          @screen_width / 2 + (@scale_x * tile.width * (x - (height / 2).to_f)),
+          @screen_height / 2 + (@scale_y * tile.height * (y - (width / 2).to_f))
       )
       end
     end

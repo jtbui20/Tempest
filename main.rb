@@ -1,8 +1,15 @@
+# THERE IS TOO MUCH TO CONTAIN!!!!
+# The custom code is spread over a large quantity of files and is manipulated through the require functionality.
+# Source code can be viewed on github (upon completion of interview. The completion of the code will not be complete when this is submitted on 30th May.)
+# This is submitted to allow access to its learning outcomes for 11.1T
+
 require 'gosu'
 require './draw_engine/SceneManager'
 
 class GameWindow < Gosu::Window
+  # The entirety of this class is passed through to another object, responsible for managing the interactivity between each scene.
   def initialize
+    # Use a config file instead of hardcoded settings.
     require 'inifile'
     config = IniFile.load('config.ini')
 
@@ -14,7 +21,6 @@ class GameWindow < Gosu::Window
 
   def init_scenes
     require './scenes/main_menu'
-
     @sm = SceneManager.new(width, height).tap do |sm|
       sm.add_scene(MAIN_MENU.new(sm))
       sm.load('Main Menu')

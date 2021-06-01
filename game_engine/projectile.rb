@@ -35,6 +35,10 @@ class Projectile < GameObject
   end
 
   def handle_collision
-    @master.remove_element(self)
+    @collider.execute_collisions.each do |i|
+      unless i.is_a?(Projectile)
+        @master.remove_element(self)
+      end
+    end
   end
 end

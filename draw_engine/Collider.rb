@@ -5,20 +5,20 @@ require './draw_engine/GosuDrawExtensions'
 
 class Collider
   attr_accessor :position, :dimensions, :collisions
-  def initialize (master, position, dimensions, accept_layers)
+
+  def initialize(master, position, dimensions, accept_layers)
     @position = position
     @dimensions = dimensions
     @master = master
     @accept_layers = accept_layers
 
     @collisions = []
-    @hitbox_visible = true
+    # Debug parameter
+    @hitbox_visible = false
   end
 
-  def add_collision (item)
-    unless @collisions.include? item
-      @collisions << item
-    end
+  def add_collision(item)
+    @collisions << item unless @collisions.include? item
   end
 
   def execute_collisions
@@ -29,27 +29,26 @@ class Collider
     @collisions = []
   end
 
-  def collision_1d? (other_position)
-    @position <= other_position && @other_position < @position + @dimensions
+  def collision_1d?(other_position)
+    @position <= other_position &&
+    @other_position < @position + @dimensions
   end
 
   # https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-  def collision_2d? (other_position, other_dimensions)
+  def collision_2d?(other_position, other_dimensions)
     @position.x <= other_position.x + other_dimensions.x &&
     @position.x + @dimensions.x >= other_position.x &&
     @position.y <= other_position.y + other_dimensions.y &&
     @position.y + @dimensions.y >= other_position.y
   end
 
-  def update (position)
+  def update(position)
     @position = position
   end
 
-  def collider_update (collidables)
-    collidables.filter { |c| @accept_layers.include?(c.layer)}.each do |other|
-      if collision_2d?(other.collider.position, other.collider.dimensions)
-        add_collision(other)
-      end
+  def collider_update(collidables)
+    collidables.filter { |c| @accept_layers.include?(c.layer) }.each do |other|
+      add_collision(other) if collision_2d?(other.collider.position, other.collider.dimensions)
     end
 
     @master.handle_collision unless @collisions.empty?
