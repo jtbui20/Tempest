@@ -14,7 +14,7 @@ class Projectile < GameObject
     @destination = destination - @dimensions / 2
     @direction = (destination - position).direction
     @magnitude = magnitude
-    @atk = atk.call
+    @atk = atk.call * 0.05
 
     @hit_layers = [Layers::DESTRUCTIBLE, Layers::CHARACTERS]
     @collider = Collider.new(self, @position, Point.new(@img.width, @img.height), @hit_layers)

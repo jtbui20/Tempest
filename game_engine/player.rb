@@ -80,6 +80,8 @@ class Player < Character
       puts "Defense : #{@character_stats.gmods.get_total(Stats::DEF)}"
       puts "Haste : #{@character_stats.gmods.get_total(Stats::HASTE)}"
       puts "Agility : #{@character_stats.gmods.get_total(Stats::AGI)}"
+    when Gosu::KB_K
+      @character_stats.hp -= 100
     end
   end
 

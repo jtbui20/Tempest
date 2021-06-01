@@ -38,7 +38,7 @@ class Character < GameObject
   def handle_collision
     @collider.execute_collisions.each do |other|
       if other.is_a?(Projectile)
-        @character_stats.hp -= (other.atk - @character_stats.get_def.call)
+        @character_stats.hp -= (other.atk / @character_stats.get_def.call)
         @character_stats.hp = 0 if @character_stats.hp <= 0
       end
     end

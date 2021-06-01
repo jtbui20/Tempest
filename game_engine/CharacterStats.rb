@@ -68,7 +68,7 @@ class CharacterStats
     @mp_min = 0
     @mp_max = 100
     @atk = 100
-    @def = 10
+    @def = 1
     @haste = 1
     @agi = 1
   end
