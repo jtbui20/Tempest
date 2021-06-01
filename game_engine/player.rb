@@ -14,6 +14,8 @@ class Player < Character
     @dash_anim = Timer.new(duration = 260)
     @dash_cooldown = Timer.new(duration = 150)
     @is_dash = false
+
+    testing
   end
 
   def Move(direction, speed = 5.0)
@@ -67,23 +69,29 @@ class Player < Character
     when Gosu::KB_SPACE
       puts @character_stats.get_current_buff.to_s
     when Gosu::KB_Y
-      buff = Buff.new("It works!", 30,
-        Modifier.new(@gmods, "Attack", Stats::ATK, 1.25),
-        Modifier.new(@gmods, "Haste", Stats::HASTE, 1.5)
-      )
-      @character_stats.trigger_buff(buff)
+      @character_stats.trigger_buff(@buffA)
       puts "resolve"
     when Gosu::KB_U
-      buff = Buff.new("Buffing system implemented!", 45,
-        Modifier.new(@gmods, "Agility", Stats::AGI, 1.5),
-        Modifier.new(@gmods, "Defence", Stats::DEF, 1.3))
-      @character_stats.trigger_buff(buff)
+      @character_stats.trigger_buff(@buffB)
+    when Gosu::KB_J
+      @character_stats.trigger_buff(@debuffA)
     when Gosu::KB_I
       puts "Attack : #{@character_stats.gmods.get_total(Stats::ATK)}"
       puts "Defense : #{@character_stats.gmods.get_total(Stats::DEF)}"
       puts "Haste : #{@character_stats.gmods.get_total(Stats::HASTE)}"
       puts "Agility : #{@character_stats.gmods.get_total(Stats::AGI)}"
     end
+  end
+
+  def testing
+    @buffA = Buff.new("It works!", 1, 30,
+      Modifier.new(@gmods, "Attack", Stats::ATK, 1.25),
+      Modifier.new(@gmods, "Haste", Stats::HASTE, 1.5))
+    @buffB = Buff.new("Buffing system implemented!", 1, 45,
+      Modifier.new(@gmods, "Agility", Stats::AGI, 1.5),
+      Modifier.new(@gmods, "Defence", Stats::DEF, 1.3))
+    @debuffA = Buff.new("Def Down", 0, 45,
+      Modifier.new(@gmods, "Attack", Stats::ATK, 0.5))
   end
 
   def gen_select_circle

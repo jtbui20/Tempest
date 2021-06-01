@@ -71,8 +71,10 @@ class Modifier
 end
 
 class Buff
-  def initialize(name, duration, *arg)
+  attr_reader :name, :align, :duration
+  def initialize(name, align, duration, *arg)
     @name = name
+    @align = align
     @duration = duration
     @active = false
     # ! Timeline? or Timer?

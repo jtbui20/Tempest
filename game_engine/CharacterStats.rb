@@ -11,24 +11,48 @@ class CharacterStats
     default_element()
 
     @gmods = ModifierDict.new()
-    @gbuffs = []
 
     @class_type = ClassType::key(class_type)
     puts @class_type
   end
 
-  def get_current_buff; return @buff; end
+  def get_current_buff; return @p_buff; end
 
   def trigger_buff(buff)
-    unless @gbuff.include?(buff); @gbuff << buff
-    @buff.on(@gmods)
+    if buff.align == 0
+      unless @n_buff.nil?
+        remove_buff(@n_buff)
+      end
+      @n_buff = buff
+      @n_buff.on(@gmods)
+    elsif buff.align == 1
+      unless @p_buff.nil?
+        remove_buff(@p_buff)
+      end
+      @p_buff = buff
+      @p_buff.on(@gmods)
+    end
+  end
+
+  def remove_buff(buff)
+    if @n_buff == buff
+      @n_buff.off
+      @n_buff = nil
+    elsif @p_buff == buff
+      @p_buff.off
+      @p_buff = nil
+    end
   end
 
   # Fix
   def remove_all_buffs
-    unless @buff.nil?
-      @buff.off
-      @buff = nil
+    unless @n_buff.nil?
+      @n_buff.off
+      @n_buff = nil
+    end
+    unless @p_buff.nil?
+      @p_buff.off
+      @p_buff = nil
     end
   end
 
@@ -76,5 +100,4 @@ class CharacterStats
   def get_def; return -> { @def }; end
   def get_haste; return -> { @haste }; end
   def get_agi; return -> { @agi }; end
-
 end
