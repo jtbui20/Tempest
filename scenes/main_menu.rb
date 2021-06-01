@@ -25,7 +25,7 @@ class MAIN_MENU < Scene
 
   def show_tut_arena(_id)
     @master.unload_top
-    require './scenes/tutorial_arena'
+    require './scenes/tutorial'
     @master.add_scene(TUT_ARENA.new(@master))
     @master.load('Tutorial')
   end

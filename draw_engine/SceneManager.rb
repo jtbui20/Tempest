@@ -6,6 +6,7 @@ class SceneManager
     @scenes_stack = []
     @width = width
     @height = height
+    @previous_screen = nil
   end
 
   def add_scene(scene)
