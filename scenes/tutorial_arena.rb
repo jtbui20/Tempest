@@ -29,7 +29,9 @@ class TUT_ARENA < Scene
   end
 
   def gen_ui
-    @elements << ProgressBar.new("PBar", self, Point.new(0,0), Point.new(100, 25), @filler.character_stats.get_hp_min, @filler.character_stats.get_hp_max, @filler.character_stats.get_hp)
+    @elements << ProgressBar.new("PBar", self, Point.new(20, 20), Point.new(498, 38), 0, -> {0}, @player.character_stats.get_hp_max, @player.character_stats.get_hp, 0xff_00ff00, 0xff_ff0000)
+    @elements << ProgressBar.new("PBar", self, Point.new(748, 20), Point.new(498, 38), 1, -> {0}, @filler.character_stats.get_hp_max, @filler.character_stats.get_hp, 0xff_00ff00, 0xffff0000)
+    @elements << Text.new("Timer", )
   end
 
   def draw

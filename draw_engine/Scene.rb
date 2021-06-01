@@ -18,6 +18,14 @@ class Scene
     @mouse_pos = Point.new(x,y)
   end
 
+  def set_frame_time(fps)
+    unless fps == 0
+      @delta_time = 1.0 / fps
+    else
+      @delta_time = 0
+    end
+  end
+
   def draw; 
     @elements.each &:draw
   end

@@ -10,6 +10,7 @@ class SceneManager
 
   def add_scene(scene)
     @scenes[scene.name] = scene
+    # Returns self to allow chaining of functions
     self
   end
 
@@ -31,6 +32,7 @@ class SceneManager
 
   def update(mouse_x, mouse_y)
     current_scene.set_mouse(mouse_x, mouse_y)
+    current_scene.set_frame_time(Gosu.fps)
     current_scene.update
   end
 

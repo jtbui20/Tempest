@@ -5,6 +5,14 @@ require_relative './Layers'
 require './game_engine/Object'
 require './draw_engine/Collider.rb'
 
+# The interactibles module defines various reusable skeleton components with default behaviours in order to quickly produce functional elements.
+# This aids designers, who are not specifically proficient in programming, but can understand each of the attributes which depicts a button.
+# The decision to use Object Orientated Programming Concepts was justified by the large quantity of UI elements. This was the perfect scenario
+# to demonstrate modularity.
+
+# Built on Tasks 3.3C - Shape Drawing and 5.3C - Hover / Reactive Button.
+
+# ! This will be depricated in the UI update
 class Button < GameObject
   attr_accessor :position, :dimensions, :color_fg, :color_bg, :click, :text
 
@@ -18,6 +26,8 @@ class Button < GameObject
     @font = Gosu::Font.new(50)
     @text = text
 
+    # This allows an event handler to operate on this button. Rather than defining it within the object itself, it is assigned a
+    # function that it calls upon achieving the state.
     @click = on_click
     @collider = Collider.new(master, position, dimensions, [])
   end
@@ -35,7 +45,23 @@ class Button < GameObject
   end
 end
 
-# Specific CircleSelect Buttons
+class Text < GameObject
+  attr_accessor :position, :dimensions, :text
+
+  def initialize(name, master, position, size, text)
+    super(name, master, position, Layers::UI)
+    @font = Gosu::Font.new(64)
+
+    @text = text
+
+  end
+
+  def draw
+    @font.draw_text_rel(@text.call, @position.x, @position.y, @layer, 1, 1, 0xff_000000)
+  end
+end
+
+# ! Specific CircleSelect Buttons
 class ButtonImg < GameObject
   attr_accessor :position, :dimensions, :click, :text
 
@@ -43,29 +69,31 @@ class ButtonImg < GameObject
     @img = img
     @dimensions = Point.new(img.width, img.height)
 
+    # ! Make anchor default for all GameObjects
     @anchor = anchor
     case anchor
     when TOP_LEFT
-      p = position
+      pa = position
     when TOP_CENTER
-      p = position - Point.new(@dimensions.x / 2, 0) 
+      pa = position - Point.new(@dimensions.x / 2, 0) 
     when TOP_RIGHT
-      p = position - Point.new(@dimensions.x, 0)
+      pa = position - Point.new(@dimensions.x, 0)
     when CENTER_LEFT
-      p = position - Point.new(0, @dimensions.y / 2)
+      pa = position - Point.new(0, @dimensions.y / 2)
     when CENTER
-      p = position - (@dimensions / 2)
+      pa = position - (@dimensions / 2)
     when CENTER_RIGHT
-      p = position - Point.new(@dimensions.x, @dimensions.y / 2)
+      pa = position - Point.new(@dimensions.x, @dimensions.y / 2)
     when BOTTOM_LEFT
-      p = position - Point.new(0, @dimensions.y)
+      pa = position - Point.new(0, @dimensions.y)
     when BOTTOM_CENTER
-      p = position - Point.new(@dimensions.x / 2, @dimensions.y)
+      pa = position - Point.new(@dimensions.x / 2, @dimensions.y)
     when BOTTOM_RIGHT
-      p = position - @dimensions
+      pa = position - @dimensions
     end
 
     super(name, master, position, Layers::UI)
+    
     @click = on_click
 
     @collider = Collider.new(master, position, dimensions, [])
@@ -79,13 +107,19 @@ end
 class ProgressBar < GameObject
   attr_accessor :positions, :dimensions, :color_fg, :color_bg, :min, :max, :value
 
-  def initialize (name, master, position, dimensions, follow_min, follow_max, follow_value)
+  def initialize (name, master, position, dimensions, direction, follow_min, follow_max, follow_value, color_norm, color_30)
     super(name, master, position, Layers::UI)
     @dimensions = dimensions
 
     @min = follow_min
     @max = follow_max
     @value = follow_value
+    @color_norm = color_norm
+    @color_30 = color_30
+
+    @img = Gosu::Image.new("./assets/hp_bar.png")
+    @padding = Point.new(9, 7)
+    @direction = direction
   end
 
   def draw
@@ -95,13 +129,23 @@ class ProgressBar < GameObject
                .push(@position + Point.new(0, @dimensions.y))
                .push(@position + @dimensions)
                .push(@position + Point.new(@dimensions.x, 0))
-    @corners_progress = []
-               .push(@position)
-               .push(@position + Point.new(0, @dimensions.y))
-               .push(@position + Point.new(@dimensions.x * value_complete, @dimensions.y))
-               .push(@position + Point.new(@dimensions.x * value_complete, 0))
+    @img.draw(@position.x, @position.y, @layer)
 
-    draw_quad_simp(@corners, [0xff_ffffff], @layer)
-    draw_quad_simp(@corners_progress, [0xff_00ff00], @layer)
+    @corners_progress = []
+               .push(@position + @padding)
+               .push(@position + @padding + Point.new(0, @dimensions.y))
+               .push(@position + @padding + Point.new(@dimensions.x * value_complete, @dimensions.y))
+               .push(@position + @padding + Point.new(@dimensions.x * value_complete, 0))
+
+    if @direction == 0
+      @corners_progress = []
+               .push(@position + @padding + Point.new(@dimensions.x - @dimensions.x * value_complete, 0))
+               .push(@position + @padding + Point.new(@dimensions.x, 0))
+               .push(@position + @padding + @dimensions)
+               .push(@position + @padding + Point.new(@dimensions.x - @dimensions.x * value_complete, @dimensions.y))
+    end
+
+    # draw_quad_simp(@corners, [0xff_ffffff], @layer)
+    draw_quad_simp(@corners_progress, [(value_complete <= 0.3) ? @color_30 : @color_norm], @layer)
   end
 end
