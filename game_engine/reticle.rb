@@ -4,9 +4,10 @@ require './draw_engine/Point'
 require './game_engine/Object'
 
 class Reticle < GameObject
-  attr_accessor :position
+  attr_accessor :position, :hover
   def initialize(scene)
     super("Reticle", scene, Point.new(0,0), Layers::UI)
+    @hover = false
     @img = Gosu::Image.new("assets/reticle.png")
     @dimensions = Point.new(@img.width, @img.height)
   end

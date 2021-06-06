@@ -7,29 +7,35 @@ require './draw_engine/Collider.rb'
 
 # The interactibles module defines various reusable skeleton components with default behaviours in order to quickly produce functional elements.
 # This aids designers, who are not specifically proficient in programming, but can understand each of the attributes which depicts a button.
-# The decision to use Object Orientated Programming Concepts was justified by the large quantity of UI elements. This was the perfect scenario
+# The decision to use Object Orientated Programming Concepts, particularly encapsulation was justified by the large quantity of UI elements. This was the perfect scenario
 # to demonstrate modularity.
 
 # Built on Tasks 3.3C - Shape Drawing and 5.3C - Hover / Reactive Button.
 
 # ! This will be depricated in the UI update
 class Button < GameObject
-  attr_accessor :position, :dimensions, :color_fg, :color_bg, :click, :text
+  attr_accessor :position, :dimensions, :color_fg, :color_bg, :click, :text, :enabled, :hover
 
-  def initialize(name, master, position, dimensions, text = '', on_click = nil)
+    # ! condense to options
+  def initialize(name, master, position, dimensions, text = '', on_click = nil, hover = true)
     super(name, master, position, Layers::UI)
     @dimensions = dimensions
 
     @color_fg = 0xff_000000
     @color_bg = 0xff_ffffff
 
+    @state = 0
+
     @font = Gosu::Font.new(50)
     @text = text
+    @enabled = true
+    @hover = hover
 
     # This allows an event handler to operate on this button. Rather than defining it within the object itself, it is assigned a
     # function that it calls upon achieving the state.
     @click = on_click
     @collider = Collider.new(master, position, dimensions, [])
+    self
   end
 
   def draw
@@ -43,14 +49,27 @@ class Button < GameObject
     center = @position + (@dimensions / 2)
     @font.draw_text_rel(@text, center.x, center.y, @layer, 0.5, 0.5, 1, 1, @color_fg)
   end
+
+  def click_down
+    @color_bg = 0xff_707070
+  end
+
+  def on_hover_enter
+    @color_bg = 0xff_dedede
+  end
+
+  def on_hover_exit
+    @color_bg = 0xff_ffffff
+  end
 end
 
 class Text < GameObject
-  attr_accessor :position, :dimensions, :text
+  attr_accessor :position, :dimensions, :text, :hover
 
   def initialize(name, master, position, size, text)
     super(name, master, position, Layers::UI)
     @font = Gosu::Font.new(size)
+    @hover = false
 
     @text = text
 
@@ -105,7 +124,7 @@ class ButtonImg < GameObject
 end
 
 class ProgressBar < GameObject
-  attr_accessor :positions, :dimensions, :color_fg, :color_bg, :min, :max, :value
+  attr_accessor :positions, :dimensions, :color_fg, :color_bg, :min, :max, :value, :hover
 
   def initialize (name, master, position, dimensions, direction, follow_min, follow_max, follow_value, color_norm, color_30)
     super(name, master, position, Layers::UI)
@@ -116,6 +135,8 @@ class ProgressBar < GameObject
     @value = follow_value
     @color_norm = color_norm
     @color_30 = color_30
+
+    @hover = false
 
     @img = Gosu::Image.new("./assets/hp_bar.png")
     @padding = Point.new(9, 7)
