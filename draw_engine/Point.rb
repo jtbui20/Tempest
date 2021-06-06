@@ -77,4 +77,19 @@ class Point
   def within_radius?(point, radius)
     distance_to(point) < radius
   end
+
+  # Opt out
+  def angle_between_vector(point, degree = true, true_zero = true)
+    out = Math.acos((self * point) / (self.magnitude * point.magnitude))
+    out = (degree) ? out * (180 / Math::PI) : out
+    out = (true_zero) ? ((self.y < 0) ? -1 * out : out) : out
+    out.round(2)
+  end
+end
+
+if __FILE__ == $0
+  a = Point.new(1, 0)
+  b = Point.new(1, 0)
+  puts a.angle_between_vector(b, true, true)
+  puts a * b
 end

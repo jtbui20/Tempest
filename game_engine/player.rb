@@ -6,6 +6,7 @@ require './game_engine/projectile'
 require './draw_engine/anchors'
 require './game_engine/Buffs'
 require './game_engine/CharacterAttributes'
+require './draw_engine/CharAnimController.rb'
 
 class Player < Character
   def initialize(master, position)
@@ -14,8 +15,17 @@ class Player < Character
     @dash_anim = Timer.new(duration = 260)
     @dash_cooldown = Timer.new(duration = 150)
     @is_dash = false
-
+    @img = Gosu::Image.load_tiles("assets/NewWizard.png", 48, 48)
+    @img_state = 0
     testing
+    @anim = CharAnimController.new()
+    @direction = Point.new(0,0)
+  end
+
+  def draw
+    frame = (Gosu.milliseconds / @anim.duration) % @anim.getState.duration
+    flip_fix = (@anim.vert_flip == -1) ? 48 * 2 : 0
+    @img[frame + @anim.getState.start].draw(@position.x + flip_fix, @position.y,  @layer, 2 * @anim.vert_flip, 2)
   end
 
   def Move(direction, speed = 5.0)
@@ -24,6 +34,7 @@ class Player < Character
 
   def update
     handle_player_input
+    @anim.update(@movement.magnitude, @direction)
     @dash_anim.update
     @dash_cooldown.update
 
@@ -31,7 +42,7 @@ class Player < Character
       @is_dash = !@is_dash
       @dash_cooldown.restart_now
     end
-
+    
     super
   end
 
@@ -51,7 +62,9 @@ class Player < Character
       movement += Point.new(1, 0)
     end
 
-    @is_dash ? Move(movement.direction, 7.5) : Move(movement.direction)
+    @direction = movement.direction
+    @movement = movement
+    @is_dash ? Move(@direction, 7.5) : Move(@direction)
   end
 
   def button_down(id)
@@ -68,6 +81,7 @@ class Player < Character
       @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0, @character_stats.get_atk))
     when Gosu::KB_SPACE
       puts @character_stats.get_current_buff.to_s
+      puts @direction.angle_between_vector(Point.new(1,0))
     when Gosu::KB_Y
       @character_stats.trigger_buff(@buffA)
       puts "resolve"

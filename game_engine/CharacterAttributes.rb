@@ -1,3 +1,11 @@
+module Difficulty
+  BEGINNER,
+  INTERMEDIATE,
+  MASTER,
+  NIGHTMARE,
+  OMEMGA = *0..4
+end
+
 module Element
   Flame,
   Water,
