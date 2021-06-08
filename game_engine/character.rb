@@ -1,3 +1,7 @@
+# * Character defines the underlying foundation of a character within the screen, particularly event handlers or logic handlers.
+# * It was evident through design that there would be multiple characters.
+# * The use of OOP Principles: Abstractation & Inheritance, was used to cater for the flexibility.
+
 require 'gosu'
 require './draw_engine/Point'
 require './draw_engine/Collider'
@@ -22,11 +26,11 @@ class Character < GameObject
     @character_stats = CharacterStats.new(ClassType::Augmenter, [[Stats::ATK, true, 10], [Stats::DEF, false, 10]] , "")
   end
 
-  def draw
+  def draw()
     @img.draw(@position.x, @position.y, 1)
   end
 
-  def update
+  def update()
     @position_center = position + (@dimensions / 2)
     @collider.update(@position)
     if @character_stats.hp <= 0;
@@ -35,7 +39,7 @@ class Character < GameObject
     end
   end
 
-  def handle_collision
+  def handle_collision()
     @collider.execute_collisions.each do |other|
       if other.is_a?(Projectile)
         @character_stats.hp -= (other.atk / @character_stats.get_def.call)

@@ -1,0 +1,59 @@
+AI states
+
+
+defensive
+  - weight 1
+  - actions
+    - dodge
+    - dash
+    - shield
+    - buff
+offensive
+  - weight 1
+  - actions
+    - dash
+    - strike
+    - projectile
+    - debuff
+
+reactive - on player input, respond
+  - branch:
+    - options: 
+      - on shoot -> shield / dash (distance)
+      - on update -> circular positioning / fixed loci
+      - on dash -> dash -> start combo
+        - start combo = spell sequence (2 chain)
+
+state machine - two set, full committment execution
+  - stalk :
+    - condition: randomm
+      - on shoot -> shield / dash (distance)
+      - on update -> circular positioning / fixed loci
+      - on dash -> dash output
+  - strike :
+    - condition: random
+      - position to target radius
+      - on mini target radius -> start combo
+
+reactive state machine - on player input, respond with set
+  - stalk (defensive):
+    - condition: out of radius
+    - set
+      - on shoot -> shield / dash (distance)
+  
+  - stalk (offensive):
+    - condition: completed spell chain / spell lock
+    - set:
+      - on shoot -> dash
+      - on update -> circular positioning / fixed loci
+        - 
+
+
+reactive state machine + limited memory
+  - on player input, respond with set
+    - determine output through net +/- HP
+      - mini max zero sum
+
+
+theory of mind
+  - pain peko

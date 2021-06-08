@@ -2,5 +2,6 @@
 issues
 tasks
 test.rb
+ProgressBar_Test.rb
 
 *.ai

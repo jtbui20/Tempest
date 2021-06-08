@@ -22,7 +22,7 @@ class IsoGrid
     end
   end
 
-  def draw
+  def draw()
     @grid.each { | tile| @tile.draw(tile.x, tile.y, Layers::BACKGROUND, 1, 1) }
   end
 end
@@ -48,8 +48,7 @@ class TopDownGrid
     end
   end
 
-  def draw
+  def draw()
     @grid.each { |tile| @tile.draw(tile.x, tile.y, Layers::BACKGROUND, @scale_x, @scale_y)}
   end
 end
-

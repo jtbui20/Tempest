@@ -1,3 +1,8 @@
+# * CharacterStats defines the specific gameplay influencing properties of a Character.
+# * Due to the nature of Ruby, all values received are passed ByValue. This means
+# * some updated values would not be correctly represented. (e.g. ProgressBar, Buffs)
+# * The use of OOP Principle: Encapsulation, was employed to alleviate this issue.
+
 require './game_engine/Buffs'
 
 class CharacterStats
@@ -45,7 +50,7 @@ class CharacterStats
     end
   end
 
-  # Fix
+  # TODO: Fix
   def remove_all_buffs
     unless @n_buff.nil?
       @n_buff.off
@@ -59,8 +64,8 @@ class CharacterStats
 
   attr_accessor :hp, :hp_min, :hp_max, :mp, :mp_min, :mp_max
 
-  def default_stats
-    # Move to config files
+  def default_stats()
+    # ! Move to config files
     @hp = 1000
     @hp_min = 0
     @hp_max = 1000
@@ -73,7 +78,7 @@ class CharacterStats
     @agi = 1
   end
 
-  def default_element
+  def default_element()
     @ELE_ATK_FLAME = 1
     @ELE_ATK_WATER = 1
     @ELE_ATK_WIND = 1
@@ -89,7 +94,7 @@ class CharacterStats
     @ELE_RES_SHADOW = 1
   end
 
-  # Observer Access
+  # * Observer Access
   def get_hp; return -> { @hp }; end
   def get_hp_min; return -> { @hp_min }; end
   def get_hp_max; return -> { @hp_max }; end

@@ -1,5 +1,6 @@
-# Ported modifier / buff management
-# ! AK-SIM / DL-SIM
+# * Ported modifer & buff management from AK-SIM / DL-SIM
+# ? https://github.com/dl-stuff/dl/blob/master/core/modifier.py by Mushymato
+# ? AK-SIM by James Bui in reference to DL-SIM
 
 class ModifierDict < Hash
   def initialize(*arg, **kwargs)
@@ -30,7 +31,7 @@ class ModifierDict < Hash
     unless self[stat].nil?
       self[stat].each {|other| out *= other.value}
     end
-    return out
+    out
   end
 end
 
@@ -44,7 +45,7 @@ class Modifier
     @active = false
   end
 
-  def to_s
+  def to_s()
     "#{@name}: #{stat} - #{value} [#{active}]"
   end
 
@@ -52,7 +53,7 @@ class Modifier
     @g_mods = mods
   end
 
-  def on
+  def on()
     unless @active
       @active = true
       @g_mods << self
@@ -61,7 +62,7 @@ class Modifier
     return
   end
 
-  def off
+  def off()
     if @active
       @active = false
       @g_mods >> self
@@ -98,7 +99,7 @@ class Buff
     return
   end
 
-  def off
+  def off()
     if @active
       @active = false
       @mods.each &:off

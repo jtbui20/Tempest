@@ -21,7 +21,7 @@ class TUT_ARENA < Scene
     @timer = Timer.new(99000, nil, false)
     gen_ui
     @is_clickable = false
-    puts find_in_scene("Player")
+    return false
   end
 
   def finalize_init

@@ -21,11 +21,11 @@ class Collider
     @collisions << item unless @collisions.include? item
   end
 
-  def execute_collisions
+  def execute_collisions()
     @collisions
   end
 
-  def clear_collisions
+  def clear_collisions()
     @collisions = []
   end
 
@@ -50,7 +50,6 @@ class Collider
     collidables.filter { |c| @accept_layers.include?(c.layer) }.each do |other|
       add_collision(other) if collision_2d?(other.collider.position, other.collider.dimensions)
     end
-
     @master.handle_collision unless @collisions.empty?
     clear_collisions
   end

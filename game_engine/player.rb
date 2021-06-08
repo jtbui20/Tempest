@@ -1,5 +1,9 @@
+# * Player defines control based inputs and client side player behaviour.
+# * Due to the external conditions, inputs and logic behaviour were implemented together to produce a functional demonstration.
+# * The use of OOP Principle: Inheritance & Polymorphism, was justified as a Player is a Character, and contains the functionality and behaviour of a Character.
+
 require 'gosu'
-require './game_engine/character'
+require './game_engine/Character'
 require './draw_engine/Point'
 require './game_engine/Timer'
 require './game_engine/projectile'
@@ -14,12 +18,21 @@ class Player < Character
 
     @dash_anim = Timer.new(duration = 260)
     @dash_cooldown = Timer.new(duration = 150)
-    @is_dash = false
     @img = Gosu::Image.load_tiles("assets/NewWizard.png", 48, 48)
-    @img_state = 0
-    testing
     @anim = CharAnimController.new()
     @direction = Point.new(0,0)
+
+    @speed = 0
+    @is_dash = false
+    @is_char_lock = false
+
+    set_anim_observers()
+    buff_test()
+  end
+
+  def set_anim_observers
+    @anim.set_observer(:speed, -> { @speed * @direction.magnitude })
+         .set_observer(:angle, -> { @direction.angle_between_vector(Point.new(1,0)) })
   end
 
   def draw
@@ -29,12 +42,13 @@ class Player < Character
   end
 
   def Move(direction, speed = 5.0)
-    @position += (direction * speed * @character_stats.get_agi.call)
+    @speed = speed * @character_stats.get_agi.call
+    @position += (direction * @speed)
   end
 
   def update
     handle_player_input
-    @anim.update(@movement.magnitude, @direction)
+    @anim.update
     @dash_anim.update
     @dash_cooldown.update
 
@@ -48,23 +62,24 @@ class Player < Character
 
   def handle_player_input
     movement = Point.new(0, 0)
-    # ! N/S 0.5 & 30deg
-    # ! N/S 1 & 45 deg
-    if Gosu.button_down?(Gosu::KB_W)
-      movement += Point.new(0, -1)
-    elsif Gosu.button_down?(Gosu::KB_S)
-      movement += Point.new(0, 1)
-    end
+    unless @is_char_lock
+      # ! N/S 0.5 & 30deg
+      # ! N/S 1 & 45 deg
+      if Gosu.button_down?(Gosu::KB_W)
+        movement += Point.new(0, -1)
+      elsif Gosu.button_down?(Gosu::KB_S)
+        movement += Point.new(0, 1)
+      end
 
-    if Gosu.button_down?(Gosu::KB_A)
-      movement += Point.new(-1, 0)
-    elsif Gosu.button_down?(Gosu::KB_D)
-      movement += Point.new(1, 0)
+      if Gosu.button_down?(Gosu::KB_A)
+        movement += Point.new(-1, 0)
+      elsif Gosu.button_down?(Gosu::KB_D)
+        movement += Point.new(1, 0)
+      end
     end
 
     @direction = movement.direction
-    @movement = movement
-    @is_dash ? Move(@direction, 7.5) : Move(@direction)
+    @is_dash ? Move(@direction, 10) : Move(@direction)
   end
 
   def button_down(id)
@@ -78,7 +93,7 @@ class Player < Character
       mouse = @master.mouse_pos
       direction = (mouse - @position).direction * 50
 
-      @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0, @character_stats.get_atk))
+      @master.add_element(Projectile.new(@master, @position_center + direction, mouse, 10.0, @character_stats.get_atk.call))
     when Gosu::KB_SPACE
       puts @character_stats.get_current_buff.to_s
       puts @direction.angle_between_vector(Point.new(1,0))
@@ -99,7 +114,7 @@ class Player < Character
     end
   end
 
-  def testing
+  def buff_test
     @buffA = Buff.new("It works!", 1, 30,
       Modifier.new(@gmods, "Attack", Stats::ATK, 1.25),
       Modifier.new(@gmods, "Haste", Stats::HASTE, 1.5))
@@ -111,6 +126,8 @@ class Player < Character
   end
 
   def gen_select_circle
-
+    # TODO: Stop camera pan, draw UI elements
+    # TODO: UI element reports back to Player
+    # TODO: Player reports to SkillManager
   end
 end

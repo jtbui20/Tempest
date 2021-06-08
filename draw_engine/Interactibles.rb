@@ -1,3 +1,10 @@
+# * UI.rb defines various reusable skeleton components with default behaviours in order to quickly produce functional elements.
+# * This aids designers, who are not specifically proficient in programming, but can understand each of the attributes which depicts a button.
+# * The decision to use OOP Principles: Encapsulation, was justified by the large quantity of UI elements. This was the perfect scenario
+# * to demonstrate modularity.
+
+# ? Built on Tasks 3.3C - Shape Drawing and 5.3C - Hover / Reactive Button.
+
 require 'gosu'
 require_relative './GosuDrawExtensions'
 require_relative './Point'
@@ -5,18 +12,11 @@ require_relative './Layers'
 require './game_engine/Object'
 require './draw_engine/Collider.rb'
 
-# The interactibles module defines various reusable skeleton components with default behaviours in order to quickly produce functional elements.
-# This aids designers, who are not specifically proficient in programming, but can understand each of the attributes which depicts a button.
-# The decision to use Object Orientated Programming Concepts, particularly encapsulation was justified by the large quantity of UI elements. This was the perfect scenario
-# to demonstrate modularity.
-
-# Built on Tasks 3.3C - Shape Drawing and 5.3C - Hover / Reactive Button.
-
 # ! This will be depricated in the UI update
 class Button < GameObject
   attr_accessor :position, :dimensions, :color_fg, :color_bg, :click, :text, :enabled, :hover
 
-    # ! condense to options
+    # ! Condense to options file
   def initialize(name, master, position, dimensions, text = '', on_click = nil, hover = true)
     super(name, master, position, Layers::UI)
     @dimensions = dimensions
@@ -31,14 +31,14 @@ class Button < GameObject
     @enabled = true
     @hover = hover
 
-    # This allows an event handler to operate on this button. Rather than defining it within the object itself, it is assigned a
-    # function that it calls upon achieving the state.
+    # * This allows an event handler to operate on this button. Rather than defining it within the object itself, it is assigned a
+    # * function that it calls upon achieving the state.
     @click = on_click
     @collider = Collider.new(master, position, dimensions, [])
     self
   end
 
-  def draw
+  def draw()
     @corners = []
                .push(@position)
                .push(@position + Point.new(0, @dimensions.y))
@@ -50,15 +50,15 @@ class Button < GameObject
     @font.draw_text_rel(@text, center.x, center.y, @layer, 0.5, 0.5, 1, 1, @color_fg)
   end
 
-  def click_down
+  def click_down()
     @color_bg = 0xff_707070
   end
 
-  def on_hover_enter
+  def on_hover_enter()
     @color_bg = 0xff_dedede
   end
 
-  def on_hover_exit
+  def on_hover_exit()
     @color_bg = 0xff_ffffff
   end
 end
@@ -72,10 +72,9 @@ class Text < GameObject
     @hover = false
 
     @text = text
-
   end
 
-  def draw
+  def draw()
     @font.draw_text(@text.call, @position.x, @position.y, @layer, 1, 1, 0xff_000000)
   end
 end
@@ -118,7 +117,7 @@ class ButtonImg < GameObject
     @collider = Collider.new(master, position, dimensions, [])
   end
 
-  def draw
+  def draw()
     @img.draw(@position.x, @position.y, @layer, 1, 1)
   end
 end
@@ -143,7 +142,7 @@ class ProgressBar < GameObject
     @direction = direction
   end
 
-  def draw
+  def draw()
     value_complete = (@value.call - @min.call).to_f / @max.call - @min.call
     @corners = []
                .push(@position)
@@ -168,5 +167,48 @@ class ProgressBar < GameObject
 
     # draw_quad_simp(@corners, [0xff_ffffff], @layer)
     draw_quad_simp(@corners_progress, [(value_complete <= 0.3) ? @color_30 : @color_norm], @layer)
+  end
+end
+class Frame < GameObject
+  attr_accessor :position, :dimensions, :color, :click, :text, :enabled, :hover, :click
+
+  def initialize(name, master, position, dimensions, color = 0xff_ffffff, click= -> (_) {})
+    super(name, master, position, Layers::UI)
+
+    @dimensions = dimensions
+    @hover = true
+    
+    @color = color
+    @click = click
+  end
+
+  def draw()
+    @corners = []
+               .push(@position)
+               .push(@position + Point.new(0, @dimensions.y))
+               .push(@position + @dimensions)
+               .push(@position + Point.new(@dimensions.x, 0))
+    draw_quad_simp(@corners, [@color], @layer)
+  end
+
+  def on_hover_enter(); end
+  def on_hover_exit(); end
+end
+
+class Image < GameObject
+  attr_accessor :position, :dimensions, :hover
+
+  def initialize(name, mmaster, position, src, scale = Point.new(1,1))
+    super(name, master, position, Layers::UI)
+    @img = Gosu::Image.new(src)
+    @dimensions = Point.new(@img.width, @img.height)
+    @position = position
+    @scale = scale
+
+    @hover = false
+  end
+
+  def draw()
+    @img.draw(@position.x, @position.y, Layers::UI, @scale.x, @scale.y)
   end
 end

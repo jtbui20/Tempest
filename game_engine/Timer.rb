@@ -8,6 +8,14 @@ class Timer
     @pausable = allow_pause
   end
 
+  def complete?; @remaining == 0 || @elapsed == @duration; end
+
+  def running?; return @running; end
+
+  def enabled?; return @enabled; end
+
+  def get_remaining; return @remaining; end
+
   def start(duration = nil, finish = nil)
     @start = Gosu.milliseconds
 
@@ -28,17 +36,11 @@ class Timer
     @running = true
   end
 
-  def complete?; @remaining == 0 || @elapsed == @duration; end
-
-  def running?; return @running; end
-
-  def enabled?; return @enabled; end
-
-  def get_remaining; return @remaining; end
-
   def update
+    # Clock runs if enabled & not complete
     if @enabled
       unless self.complete?
+        # Pausable timers require halting time & halt progress
         if @pausable
           if self.running?
             @elapsed = Gosu.milliseconds - @paused_time + @preElapsed
@@ -77,8 +79,8 @@ class Timer
   def restart_now 
     start(@duration)
   end
-
-  def milliseconds_to_seconds (milli) (milli == 0) ? 0 : (milli * 0.001).round(0); end
+  
   def milliseconds_to_minutes (milli) seconds_to_minutes milliseconds_to_seconds milli; end
+  def milliseconds_to_seconds (milli) (milli == 0) ? 0 : (milli * 0.001).round(0); end
   def seconds_to_milliseconds (seconds) seconds * 1000; end
 end
