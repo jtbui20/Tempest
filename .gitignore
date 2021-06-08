@@ -1,6 +1,5 @@
 .vscode
-issues
-tasks
+*.txt
 test.rb
 ProgressBar_Test.rb
 
